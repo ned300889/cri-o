@@ -20,6 +20,9 @@
   copy: 
     src: "userns.conf"
     dest: "/etc/sysctl.d/userns.conf"
+    mode: 0644
+    owner: root
+    group: root
 
 - name: edit default grub to allow rootless podman
   lineinfile:
@@ -30,7 +33,8 @@
     line: '\1 {{ cgroup }}=1\2'
 
 - name: rebuild grub
-  cmd: "sudo grub2-mkconfig -o /boot/grub2/grub.cfg"
+  command: "sudo grub2-mkconfig -o /boot/grub2/grub.cfg"
+  register: result
   changed_when:
     - "'done'"
 
@@ -38,7 +42,7 @@
   file:
     path: "{{ item.item }}"
     state: file
-    mode: 0600
+    mode: 0644
     group: root
     owner: root
   with_items: 
@@ -51,7 +55,7 @@
     shell: /bin/nologin
 
 - name: add subuids + subgids to podman user 100000-165535 
-  cmd: "usermod --add-subuids 100000-165535 --add-subgids 100000-165535 podman"
+  command: "usermod --add-subuids 100000-165535 --add-subgids 100000-165535 podman"
 
 - name: edit registeries to only have docker images
   lineinfile:
