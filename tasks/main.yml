@@ -1,0 +1,9 @@
+---
+- name: Include OS specific tasks
+  include_tasks: "{{ ansible_os_family }}-crio-install.yml"
+
+- name: Start and enable CRI-O
+  systemd:
+    name: crio
+    state: started
+    enabled: true

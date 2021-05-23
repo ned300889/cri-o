@@ -1,0 +1,11 @@
+---
+- name: Enable module
+  command: dnf module enable -y cri-o:1.20
+  register: result
+  changed_when:
+    - '"Enabling module streams" in result.stdout'
+
+- name: Install cri-o
+  dnf:
+    name: cri-o
+    state: present
