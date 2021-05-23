@@ -40,7 +40,7 @@
 
 - name: Creating subgid and subuid to allow rootless podman
   file:
-    path: "{{ item.item }}"
+    path: "{{ item }}"
     state: file
     mode: 0644
     group: root
