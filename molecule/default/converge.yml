@@ -4,4 +4,4 @@
   tasks:
     - name: "Include cri-o"
       include_role:
-        name: "cri-o"
+        name: "cri_o"
