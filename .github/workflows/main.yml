@@ -2,9 +2,12 @@ on: push
 
 jobs:
   molecule:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           path: "${{ github.repository }}"
-      - uses: gofrolist/molecule-action@v2
+      - uses: robertdebock/molecule-action@2.6.16
+        with:
+          image: geerlingguy/docker-fedora34-ansible:latest
+
