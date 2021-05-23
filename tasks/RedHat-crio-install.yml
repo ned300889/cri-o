@@ -59,7 +59,7 @@
 
 - name: edit registeries to only have docker images
   lineinfile:
-    dest: /etc/containers/registeries
+    dest: /etc/containers/registeries.conf
     regexp: 'unqualified-search-registeries*'
     line: unqualified-search-registeries =["docker.io"]
     state: present
