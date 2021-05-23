@@ -9,7 +9,6 @@
   dnf:
     name: cri-o
     state: present
-  warn: false
 
 - name: Start and enable CRI-O
   systemd:
