@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include cri-o"
-      include_role:
-        name: "cri_o"

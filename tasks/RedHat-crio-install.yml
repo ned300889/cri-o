@@ -9,3 +9,54 @@
   dnf:
     name: cri-o
     state: present
+  warn: false
+
+- name: Start and enable CRI-O
+  systemd:
+    name: crio
+    state: started
+    enabled: true
+
+- name: setup userns.conf and copy config
+  copy: 
+    src: "userns.conf"
+    dest: "/etc/sysctl.d/userns.conf"
+
+- name: edit default grub to allow rootless podman
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.* {{ cgroup }})\"[^\"]+)(\".*)'
+    line: '\1 {{ cgroup }}=1\2'
+
+- name: rebuild grub
+  cmd: "sudo grub2-mkconfig -o /boot/grub2/grub.cfg"
+  changed_when:
+    - "'done'"
+
+- name: Creating subgid and subuid to allow rootless podman
+  file:
+    path: "{{ item.item }}"
+    state: file
+    mode: 0600
+    group: root
+    owner: root
+  with_items: 
+    - ["/etc/subgid","/etc/subuid"]
+
+- name: create podman user
+  ansible.builtin.user:
+    name: podman
+    state: present
+    shell: /bin/nologin
+
+- name: add subuids + subgids to podman user 100000-165535 
+  cmd: "usermod --add-subuids 100000-165535 --add-subgids 100000-165535 podman"
+
+- name: edit registeries to only have docker images
+  lineinfile:
+    dest: /etc/containers/registeries
+    regexp: 'unqualified-search-registeries*'
+    line: unqualified-search-registeries =["docker.io"]
+    state: present
