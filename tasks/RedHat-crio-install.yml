@@ -57,9 +57,9 @@
 - name: add subuids + subgids to podman user 100000-165535 
   command: "usermod --add-subuids 100000-165535 --add-subgids 100000-165535 podman"
 
-- name: edit registeries to only have docker images
+- name: edit registries to only have docker images
   lineinfile:
-    dest: /etc/containers/registeries.conf
-    regexp: 'unqualified-search-registeries*'
-    line: unqualified-search-registeries =["docker.io"]
+    dest: /etc/containers/registries.conf
+    regexp: 'unqualified-search-registries*'
+    line: unqualified-search-registries =["docker.io"]
     state: present
