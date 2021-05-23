@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: fedora:34
+    image: geerlingguy/docker-fedora34-ansible:latest
     pre_build_image: true
 provisioner:
   name: ansible
